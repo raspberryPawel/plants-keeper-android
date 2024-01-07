@@ -1,5 +1,6 @@
 package com.example.plantskeeper.repository
 
+import EnvConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -14,8 +15,6 @@ interface PlantsService {
 
 
     companion object {
-        private const val STAR_URL = "http://192.168.0.199:5000"
-
         private val logger = HttpLoggingInterceptor().apply {
             this.level = HttpLoggingInterceptor.Level.BODY
         }
@@ -26,7 +25,7 @@ interface PlantsService {
 
         private val retrofit: Retrofit by lazy {
             Retrofit.Builder()
-                .baseUrl(STAR_URL)
+                .baseUrl(EnvConfig.getServerPathWithPort())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttp)
                 .build()

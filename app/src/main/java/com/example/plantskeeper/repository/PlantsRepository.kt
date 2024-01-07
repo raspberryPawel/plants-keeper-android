@@ -4,7 +4,7 @@ import retrofit2.Response
 
 class PlantsRepository {
 
-    suspend fun getStarResponse(): Response<PlantResponse> =
+    suspend fun getAllPlantsResponse(): Response<PlantResponse> =
         PlantsService.plantsService.getAllPlants()
 
 }
