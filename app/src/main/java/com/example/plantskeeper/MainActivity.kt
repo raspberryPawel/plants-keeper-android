@@ -3,6 +3,7 @@
 package com.example.plantskeeper
 
 import MainViewModel
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,6 +28,12 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
+    private fun navigateToDetails(id: String) {
+        val intent = Intent(this, SinglePlantActivity::class.java)
+        intent.putExtra("PLANT_ID", "$id")
+        startActivity(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -34,7 +41,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PlantsKeeperTheme {
-                MainView(viewModel)
+                MainView(viewModel = viewModel,
+                    onClick = { id -> navigateToDetails(id) })
             }
         }
     }
@@ -42,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainView(viewModel: MainViewModel) {
+fun MainView(viewModel: MainViewModel, onClick: (String) -> Unit) {
     val uiState by viewModel.immutablePlantsData.observeAsState(UiState())
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -74,7 +82,11 @@ fun MainView(viewModel: MainViewModel) {
                 }
             }
 
-            uiState.data != null -> uiState.data?.let { MyPlantsView(plants = it) }
+            uiState.data != null -> uiState.data?.let {
+                MyPlantsView(
+                    plants = it,
+                    onClick = { id -> onClick(id) })
+            }
         }
     }
 }

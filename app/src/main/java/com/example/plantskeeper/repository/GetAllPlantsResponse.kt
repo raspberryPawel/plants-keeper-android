@@ -15,7 +15,12 @@ data class PlantResponseData(
 )
 
 
-data class PlantResponse(
+data class GetAllPlantsResponse(
     val code: String,
     val data: PlantResponseData,
+)
+
+data class GetPlantResponse(
+    val code: String,
+    val data: Plant,
 )

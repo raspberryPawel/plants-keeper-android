@@ -2,6 +2,7 @@ package com.example.plantskeeper
 
 import EnvConfig
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -23,7 +24,7 @@ import coil.compose.AsyncImage
 import com.example.plantskeeper.repository.Plant
 
 @Composable
-fun MyPlantsView(plants: List<Plant>) {
+fun MyPlantsView(plants: List<Plant>, onClick: (String) -> Unit) {
     LazyRow(
         Modifier
             .width(500.dp)
@@ -32,10 +33,12 @@ fun MyPlantsView(plants: List<Plant>) {
     ) {
         items(plants) { plant ->
             SinglePlantView(
+                plant._id,
                 plant.name,
                 plant.details.type,
                 //@TODO: ONLY FOR DEVELOPMENT PURPOSES
-                plant.image.replace("http://localhost", EnvConfig.getServerPath())
+                plant.image.replace("http://localhost", EnvConfig.getServerPath()),
+                onClick = { id -> onClick.invoke(id) }
             )
         }
     }
@@ -43,12 +46,19 @@ fun MyPlantsView(plants: List<Plant>) {
 
 
 @Composable
-fun SinglePlantView(plantName: String, plantType: String, imageUrl: String) {
+fun SinglePlantView(
+    plantId: String,
+    plantName: String,
+    plantType: String,
+    imageUrl: String,
+    onClick: (String) -> Unit,
+) {
     Box(
         modifier = Modifier
             .width(180.dp)
             .height(280.dp)
             .padding(10.dp)
+            .clickable { onClick.invoke(plantId) }
     ) {
         Box(
             modifier = Modifier.zIndex(10F)
